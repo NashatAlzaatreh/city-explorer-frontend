@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import Weather from "./Weather";
 
 class App extends React.Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class App extends React.Component {
       errorMessage: "",
       errorName: "",
       dataShow: false,
+      weatherList: [],
     };
   }
 
@@ -43,11 +45,18 @@ class App extends React.Component {
       const locIqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATION_IQ_KEY}&q=${this.state.locationName}&format=json`;
       console.log(locIqUrl);
 
+      const WeatherUrl = `${process.env.REACT_APP_SERVER_URL}/weather`;
+
       const locIqResponse = await axios.get(locIqUrl);
+
+      const WeatherResponse = await axios.get(WeatherUrl);
+
       console.log(locIqResponse);
+      console.log(WeatherResponse.data);
       console.log(locIqResponse.data[0]);
       this.setState({
         locationData: locIqResponse.data[0],
+        weatherList: WeatherResponse.data,
       });
     } catch (error) {
       if (this.state.locationName) {
@@ -93,34 +102,53 @@ class App extends React.Component {
         </div>
 
         <div>
+          <Weather
+            locationInfo={this.state.locationInfo}
+            locationData={this.state.locationData}
+          />
+        </div>
+
+        <div>
           {this.state.isError && (
             <div className="errors">
               <h3> {this.state.errorName} </h3>
               <p>{this.state.errorMessage}</p>
             </div>
           )}
-
           {this.state.dataShow && (
             <div>
-              <Card style={{ width: "25rem" }}>
-                <Card.Img
-                  variant="top"
-                  src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATION_IQ_KEY}&center=${this.state.locationData.lat},${this.state.locationData.lon}&zoom=10`}
-                  alt="Location image"
-                />
-                <Card.Body>
-                  <Card.Title>
-                    City Info: {this.state.locationData.display_name}
-                  </Card.Title>
-                  <Card.Text>
-                    latitude : {this.state.locationData.lat}
-                  </Card.Text>
-                  <Card.Text>
-                    longitude : {this.state.locationData.lon}
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-              ;
+              <div>
+                <Card style={{ width: "25rem" }}>
+                  <Card.Img
+                    variant="top"
+                    src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATION_IQ_KEY}&center=${this.state.locationData.lat},${this.state.locationData.lon}&zoom=10`}
+                    alt="Location image"
+                  />
+                  <Card.Body>
+                    <Card.Title>
+                      City Info: {this.state.locationData.display_name}
+                    </Card.Title>
+                    <Card.Text>
+                      latitude : {this.state.locationData.lat}
+                    </Card.Text>
+                    <Card.Text>
+                      longitude : {this.state.locationData.lon}
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </div>
+              <div>
+                {this.state.weatherList.map((item) => {
+                  return (
+                    <div>
+                      <p>{item.data[0].valid_date}</p>
+                      <p>{item.data[0].weather.description}</p>
+                      <p>{item.data[0].app_max_temp}</p>
+                      <p>{item.data[0].app_min_temp}</p>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>
