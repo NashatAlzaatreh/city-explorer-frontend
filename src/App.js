@@ -45,17 +45,20 @@ class App extends React.Component {
       const locIqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATION_IQ_KEY}&q=${this.state.locationName}&format=json`;
       console.log(locIqUrl);
 
-      const WeatherUrl = `${process.env.REACT_APP_SERVER_URL}/weather`;
+      const WeatherUrl = `${process.env.REACT_APP_SERVER_URL}/weather?city_name=${this.state.locationName}`;
 
       const locIqResponse = await axios.get(locIqUrl);
 
+      await this.setState({
+        locationData: locIqResponse.data[0],
+      });
+      console.log(locIqResponse.data[0]);
       const WeatherResponse = await axios.get(WeatherUrl);
 
-      console.log(locIqResponse);
-      console.log(WeatherResponse.data);
-      console.log(locIqResponse.data[0]);
-      this.setState({
-        locationData: locIqResponse.data[0],
+      // console.log(locIqResponse);
+
+      // console.log(locIqResponse.data[0]);
+      await this.setState({
         weatherList: WeatherResponse.data,
       });
     } catch (error) {
@@ -79,6 +82,7 @@ class App extends React.Component {
         });
       }
     }
+
     // =======/// this is locationIQ block ///========
   };
   render() {
@@ -115,7 +119,7 @@ class App extends React.Component {
               <p>{this.state.errorMessage}</p>
             </div>
           )}
-          {this.state.dataShow && (
+          {!this.state.isError && this.state.dataShow && (
             <div>
               <div>
                 <Card style={{ width: "25rem" }}>
@@ -141,10 +145,8 @@ class App extends React.Component {
                 {this.state.weatherList.map((item) => {
                   return (
                     <div>
-                      <p>{item.data[0].valid_date}</p>
-                      <p>{item.data[0].weather.description}</p>
-                      <p>{item.data[0].app_max_temp}</p>
-                      <p>{item.data[0].app_min_temp}</p>
+                      <p>{item.date}</p>
+                      <p>{item.description}</p>
                     </div>
                   );
                 })}
