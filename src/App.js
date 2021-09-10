@@ -17,6 +17,7 @@ class App extends React.Component {
       errorName: "",
       dataShow: false,
       weatherList: [],
+      weatherBitData: [],
     };
   }
 
@@ -40,10 +41,12 @@ class App extends React.Component {
     });
 
     try {
+      const location = this.state.locationName;
+      console.log(location);
       // console.log(this.state.locationName);
       // =======/// this is locationIQ block ///========
       const locIqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATION_IQ_KEY}&q=${this.state.locationName}&format=json`;
-      console.log(locIqUrl);
+      // console.log(locIqUrl);
 
       const WeatherUrl = `${process.env.REACT_APP_SERVER_URL}/weather?city_name=${this.state.locationName}`;
 
@@ -53,14 +56,47 @@ class App extends React.Component {
         locationData: locIqResponse.data[0],
       });
       console.log(locIqResponse.data[0]);
+      // ============/// this is locationIQ block ///===============
+
+      // ==================== weatherBit ===========================
+
+      const weatherBitResponse = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/weather?lat=${this.state.locationData.lat}&lon=${this.state.locationData.lon}`
+      );
+      // console.log(this.state.locationData.lon);
+      // console.log(weatherBitResponse);
+
+      await this.setState({
+        weatherBitData: weatherBitResponse.data,
+      });
+      console.log(weatherBitResponse.data);
+
+      // ==================== weatherBit ===========================
+      // ===================== Movies ==============================
+
+      const moviesResponse = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/movies?city_name=${location}`
+      );
+
+      console.log(moviesResponse);
+
+      await this.setState({
+        weatherBitData: moviesResponse.data,
+      });
+      console.log(moviesResponse.data);
+
+      // ===================== Movies ==============================
+      // console.log(this.state.locationData.lon);
+      // console.log(locIqResponse.data[0]);
       const WeatherResponse = await axios.get(WeatherUrl);
 
       // console.log(locIqResponse);
 
       // console.log(locIqResponse.data[0]);
-      await this.setState({
+      this.setState({
         weatherList: WeatherResponse.data,
       });
+      console.log(WeatherResponse.data);
     } catch (error) {
       if (this.state.locationName) {
         this.setState({
@@ -150,6 +186,16 @@ class App extends React.Component {
                     </div>
                   );
                 })}
+              </div>
+              <div>
+                {/* {this.state.weatherBitData.map((item) => {
+                  return (
+                    <div>
+                      <p>{item.date.data.high_temp}</p>
+                      <p>{item.description.data.low_temp}</p>
+                    </div>
+                  );
+                })} */}
               </div>
             </div>
           )}
