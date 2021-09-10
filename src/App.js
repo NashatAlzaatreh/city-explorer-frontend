@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import Weather from "./Weather";
+// import Weather from "./Weather";
 
 class App extends React.Component {
   constructor(props) {
@@ -18,6 +18,7 @@ class App extends React.Component {
       dataShow: false,
       weatherList: [],
       weatherBitData: [],
+      moviesData: [],
     };
   }
 
@@ -42,9 +43,10 @@ class App extends React.Component {
 
     try {
       const location = this.state.locationName;
+
       console.log(location);
       // console.log(this.state.locationName);
-      // =======/// this is locationIQ block ///========
+      // ==================/// this is locationIQ block ///==================
       const locIqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATION_IQ_KEY}&q=${this.state.locationName}&format=json`;
       // console.log(locIqUrl);
 
@@ -56,7 +58,7 @@ class App extends React.Component {
         locationData: locIqResponse.data[0],
       });
       console.log(locIqResponse.data[0]);
-      // ============/// this is locationIQ block ///===============
+      // ====================/// this is locationIQ block ///=========================
 
       // ==================== weatherBit ===========================
 
@@ -78,10 +80,8 @@ class App extends React.Component {
         `${process.env.REACT_APP_SERVER_URL}/movies?city_name=${location}`
       );
 
-      console.log(moviesResponse);
-
       await this.setState({
-        weatherBitData: moviesResponse.data,
+        moviesData: moviesResponse.data,
       });
       console.log(moviesResponse.data);
 
@@ -142,13 +142,6 @@ class App extends React.Component {
         </div>
 
         <div>
-          <Weather
-            locationInfo={this.state.locationInfo}
-            locationData={this.state.locationData}
-          />
-        </div>
-
-        <div>
           {this.state.isError && (
             <div className="errors">
               <h3> {this.state.errorName} </h3>
@@ -161,7 +154,7 @@ class App extends React.Component {
                 <Card style={{ width: "25rem" }}>
                   <Card.Img
                     variant="top"
-                    src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATION_IQ_KEY}&center=${this.state.locationData.lat},${this.state.locationData.lon}&zoom=10`}
+                    src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATION_IQ_KEY}&center=${this.state.locationData.lat},${this.state.locationData.lon}&zoom=13`}
                     alt="Location image"
                   />
                   <Card.Body>
@@ -178,24 +171,39 @@ class App extends React.Component {
                 </Card>
               </div>
               <div>
-                {this.state.weatherList.map((item) => {
+                <div>
+                  {this.state.weatherBitData.map((item) => {
+                    return (
+                      <div>
+                        <p>
+                          "description": "Low of {item.low_temp}, high of{" "}
+                          {item.max_temp} with
+                          {item.description}", "date": {item.date}
+                        </p>
+                      </div>
+                    );
+                  })}
+                  {/* <p>{this.state.moviesData.result[0].vote_average}</p> */}
+                  <p></p>
+                </div>
+              </div>
+              <div>
+                {this.state.moviesData.map((item) => {
                   return (
                     <div>
-                      <p>{item.date}</p>
-                      <p>{item.description}</p>
+                      <p>{item.title}</p>
+                      <p>{item.overview}</p>
+                      {/* <img
+                        src={`https://api.themoviedb.org/3/movie/top_rated?api_key=0a0768ea4b3665d96376cfa8f6ac8793&city_name=seattle&${item.poster_path}`}
+                        alt=""
+                      /> */}
+                      <p>{item.vote_average}</p>
+                      <p>{item.vote_count}</p>
+                      <p>{item.popularity}</p>
+                      <p>{item.release_date}</p>
                     </div>
                   );
                 })}
-              </div>
-              <div>
-                {/* {this.state.weatherBitData.map((item) => {
-                  return (
-                    <div>
-                      <p>{item.date.data.high_temp}</p>
-                      <p>{item.description.data.low_temp}</p>
-                    </div>
-                  );
-                })} */}
               </div>
             </div>
           )}
