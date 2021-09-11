@@ -1,13 +1,88 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+#headerDiv {
+  color: white;
+}
+#headerDiv h4 {
+  margin: 50px;
+  margin-left: 200px;
+  margin-right: 200px;
+  text-align: center;
+}
+
+#moviesDiv {
+  float: left;
+}
+
+#moviesDiv .card {
+  height: 1025px;
+  margin: 29.5px;
+}
+
+#footerDiv {
+  clear: both;
+  color: white;
+  text-align: center;
+  margin-top: 250px;
+}
+
+.search-bar {
+  width: 500px;
+  margin: 100px;
+  text-align: center;
+  margin-left: 500px;
+}
+button {
+  width: 150px;
+}
+
+#bodyDiv {
+  background-color: black;
+  min-height: 721px;
+}
+
+nav {
+  float: right;
+  display: inline-block;
+
+  font-size: 35px;
+  font-weight: bolder;
+  margin-top: -60px;
+}
+
+nav a {
+  margin-right: 100px;
+  text-decoration: none;
+  color: rgb(184, 133, 133);
+}
+
+#mapDiv {
+  margin-left: 31%;
+}
+
+#weatherh2 {
+  color: white;
+  margin: 50px;
+  margin-left: -100px;
+}
+
+tr {
+  width: 500px;
+  text-align: center;
+}
+th {
+  width: 500px;
+  text-align: center;
 }

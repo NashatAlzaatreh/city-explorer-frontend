@@ -3,8 +3,8 @@ import React from "react";
 class Footer extends React.Component {
   render() {
     return (
-      <div>
-        <h4>Nashat Alzaatreh &copy; 2021 All Rights</h4>
+      <div id = "footerDiv">
+        <h4>Nashat Alzaatreh &copy; 2021 all rights reserved</h4>
       </div>
     );
   }
