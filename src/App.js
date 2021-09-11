@@ -6,7 +6,7 @@ import Footer from "./Components/Footer/foter";
 class App extends React.Component {
   render() {
     return (
-      <div>
+      <div id = "bodyDiv">
         <Header />
         <Main />
         <Footer />
